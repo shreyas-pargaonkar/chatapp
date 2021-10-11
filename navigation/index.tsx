@@ -8,17 +8,19 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import { ColorSchemeName, Pressable,Text,View,Image, useWindowDimensions, } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import TabOneScreen from '../screens/HomeScreen';
+
+import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-
+import ChatRoomScreen from '../screens/ChatRoomScreen';
+import HomeScreen from '../screens/HomeScreen';
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
@@ -37,15 +39,83 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+    <Stack.Navigator >
+      <Stack.Screen name="HomeScreen" component={HomeScreen}
+       options={{headerTitle:props => <HomeHeader{...props}/> }} />
+      <Stack.Screen name="ChatRoom" component={ChatRoomScreen} 
+       options={{headerTitle:ChatRoomHeader,}}
+      />   
+      
+   
+     
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
+  
+     
+    
     </Stack.Navigator>
   );
 }
+
+
+
+//home screen component
+
+
+
+  const HomeHeader=(props) =>{
+
+    const { width } = useWindowDimensions();
+
+    return(
+         <View style={{flexDirection:'row' ,
+          justifyContent:'space-between',
+          width:'97%',
+          padding:2,
+          alignItems:'center'}}>
+              <Image source={{uri:'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png' }}
+              style={{width:30,height:30,borderRadius:30}} 
+              />
+              <Text style={{justifyContent:'center',alignContent:'center',fontWeight:'bold'}}>Chat</Text>
+            
+            <View>
+              <Ionicons name="md-settings-outline" size={24} color="black" style={{marginHorizontal:3}} />
+            </View>
+         </View>
+        
+        
+      
+     
+    )
+  }
+
+  const ChatRoomHeader=(props) =>{
+
+    const { width } = useWindowDimensions();
+
+    return(
+         <View style={{flexDirection:'row' ,
+          justifyContent:'space-between',
+          width:'90%',
+          marginRight:'auto',
+          
+          padding:2,
+          alignItems:'center'}}>
+              
+              <Text style={{justifyContent:'center',alignContent:'center',fontWeight:'bold',flex:1,marginLeft:85}}>{props.children}</Text>
+            
+           
+             <View>
+              <Image source={{uri:'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png' }}
+              style={{width:30,height:30,borderRadius:30}} 
+              />
+            </View>
+         </View>
+        
+        
+      
+     
+    )
+  }
 
 /**
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
